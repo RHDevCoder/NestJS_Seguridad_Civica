@@ -12,11 +12,6 @@ export class AppController {
 
   @Post()
   getPost() {
-    return "Desde @Post"
-  }
-
-  @Put()
-  getPut() {
-    return "Desde @Put"
+    return this.appService.postHello()
   }
 }
