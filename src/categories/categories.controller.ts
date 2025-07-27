@@ -21,6 +21,7 @@ export class CategoriesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    console.log(id)
     return this.categoriesService.findOne(+id);
   }
 
