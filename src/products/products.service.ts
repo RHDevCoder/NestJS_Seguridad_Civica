@@ -22,6 +22,11 @@ export class ProductsService {
       errors.push('La categoria no existe')
       throw new NotFoundException(errors)
     }
+
+    return this.productRepository.save({
+      ...createProductDto,
+      category
+    })
   }
 
   findAll() {
