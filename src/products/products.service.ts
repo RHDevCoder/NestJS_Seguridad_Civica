@@ -3,7 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { Category } from 'src/categories/entities/category.entity';
 
 @Injectable()
@@ -30,45 +30,34 @@ export class ProductsService {
   }
 //INICIO DE CORRECION DE CODIGO EN products.controllers.ts (CATEGORY)
   async findAll(categoryId?: number) {
-    if (categoryId) {
-      const [ products, total ] = await this.productRepository.findAndCount({
-        where: {
-          category: {
-            id: categoryId
-          }
-        },
-        relations: {
-          category: true
-        },
-        order: {
-          id: 'DESC'
-        }
-      });
-
-      return {
-        products,
-        total
-      }
-    }
-
-    // Si no hay filtro, trae todo
-    const [products, total] = await this.productRepository.findAndCount({
+    const options : FindManyOptions<Product> = {
       relations: {
         category: true
       },
       order: {
         id: 'DESC'
       }
-    });
+    }
+
+    if (categoryId) {
+      options.where = {
+        category: {
+          id: categoryId
+        }
+      }
+    }
+
+    // Si no hay filtro, trae todo
+    const [products, total] = await this.productRepository.findAndCount(options)
 
     return {
       products,
       total
-    };
+    }
   }
 //FIN DE CORRECION DE CODIGO EN products.controllers.ts (CATEGORY)
 
-/*
+/*CODIGO ORIGINAL PRESENTA ERROR CON products.controllers.ts (CATEGORY)
   async findAll(categoryId: number) {
     if(categoryId){
       const [ products, total] = await this.productRepository.findAndCount({
