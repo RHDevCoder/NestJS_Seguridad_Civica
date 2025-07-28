@@ -28,9 +28,70 @@ export class ProductsService {
       category
     })
   }
+//INICIO DE CORRECION DE CODIGO EN products.controllers.ts (CATEGORY)
+  async findAll(categoryId?: number) {
+    if (categoryId) {
+      const [ products, total ] = await this.productRepository.findAndCount({
+        where: {
+          category: {
+            id: categoryId
+          }
+        },
+        relations: {
+          category: true
+        },
+        order: {
+          id: 'DESC'
+        }
+      });
 
-  async findAll() {
-    const [ data, total] = await this.productRepository.findAndCount({
+      return {
+        products,
+        total
+      }
+    }
+
+    // Si no hay filtro, trae todo
+    const [products, total] = await this.productRepository.findAndCount({
+      relations: {
+        category: true
+      },
+      order: {
+        id: 'DESC'
+      }
+    });
+
+    return {
+      products,
+      total
+    };
+  }
+//FIN DE CORRECION DE CODIGO EN products.controllers.ts (CATEGORY)
+
+/*
+  async findAll(categoryId: number) {
+    if(categoryId){
+      const [ products, total] = await this.productRepository.findAndCount({
+        where: {
+          category: {
+            id: categoryId
+          }
+        },
+        relations: {
+          category: true
+        },
+        order: {
+          id: 'DESC'
+        }
+      })
+
+      return {
+        products,
+        total
+      }
+    }
+
+    const [ products, total] = await this.productRepository.findAndCount({
       relations: {
         category: true
       },
@@ -40,11 +101,11 @@ export class ProductsService {
     })
 
     return {
-      data,
+      products,
       total
     }
-
   }
+*/
 
   findOne(id: number) {
     return `This action returns a #${id} product`;
