@@ -29,14 +29,16 @@ export class ProductsService {
     })
   }
 //INICIO DE CORRECION DE CODIGO EN products.controllers.ts (CATEGORY)
-  async findAll(categoryId?: number) {
+//456 SE PONE ? EN TAKE PARA EVITAR ERROR
+  async findAll(categoryId?: number, take?: number) {
     const options : FindManyOptions<Product> = {
       relations: {
         category: true
       },
       order: {
         id: 'DESC'
-      }
+      },
+      take,
     }
 
     if (categoryId) {
