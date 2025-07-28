@@ -1,0 +1,42 @@
+[33m2ffa044[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m 462 Creando la entidad con los contenidos de la transaccion
+[33mf6b0dd2[m 461 Diagrama de ventas y creando el resource
+[33mfa020ad[m 460 Eliminar productos
+[33m6317451[m 459 Actualizar productos
+[33mbdd3fb5[m 458 Obtener productos por su ID
+[33mf9c281f[m 457 Saltar cantidad de registros con skip
+[33md74ddf7[m 456 Limitando cantidad de productos con take
+[33m50ed8bb[m 455 Adaptando el codigo para evitar repeticion
+[33m0824a46[m 454 Filtrando productos por categoria
+[33mc7c227c[m 453 Aceptando parametros para filtrar productos por URL
+[33me9fff5c[m 452 Obtener el total de productos existentes
+[33md9624f5[m 451 Obtener todos los productos
+[33mf46a4d9[m 450 Almacenando los productos con categoria
+[33m0c29bce[m 449 Revisando si la categoria existe
+[33m3eb4d72[m 448 Inyectando el repositorio en el service de productos y categorias
+[33ma4a7de9[m 447 Añadiendo validacion a productos
+[33m6aec510[m 446 Relacionar entities en TypeORM
+[33m41df37c[m 445 Creando el entity de productos
+[33m899f660[m 444 Eliminar una categoria
+[33m4e4aab6[m 443 Actualizando categorias
+[33m5609afd[m 442 Generando un pipe de validacion
+[33m4de223d[m 441 Pipes en NestJS
+[33m162a96f[m 440 Excepciones en NestJS
+[33ma551d28[m 439 Obtener categoria por id
+[33m19e89ba[m 438 Obtener todas las categorias
+[33m41574af[m 437 Almacenando categorias en la base de datos
+[33m28d7f49[m 436 Registrando el repositorio en el service
+[33mf748619[m 435 Registrando las entidades en TypeORM
+[33m439cdbd[m 434 Creando el entity de categorias
+[33m48bf3f8[m 433 Finalizando la configuracion de la BD y TypeORM
+[33m0bd9bbb[m 432 Agregando las credenciales en variables de entorno
+[33mbbcce43[m 431 Creando una base de datos PostgreSQL
+[33mad50257[m 430 Instalando TypeORM
+[33me437dc3[m 428 Personalizando la validacion del DTO
+[33mcc45efb[m 427 Añadiendo validacion en el DTO
+[33m495576d[m 425 Creando un Resource para Categorias
+[33mbf1d8b3[m 424 Creando el Service para Categorias
+[33mdac631a[m 423 Creando el Controller para Categorias
+[33m4741142[m 422 Creando el Module para Categorias
+[33meb8ae0d[m 419 Aplicando services
+[33mcc30f51[m 418 Aplicando controladores + Reto
+[33medb1adf[m 415 Creando el primer proyecto con NestJS
