@@ -29,8 +29,8 @@ export class ProductsService {
     })
   }
 //INICIO DE CORRECION DE CODIGO EN products.controllers.ts (CATEGORY)
-//456 SE PONE ? EN TAKE PARA EVITAR ERROR
-  async findAll(categoryId?: number, take?: number) {
+//456+457 SE PONE ? EN TAKE Y SKIP PARA EVITAR ERROR
+  async findAll(categoryId?: number, take?: number, skip?: number) {
     const options : FindManyOptions<Product> = {
       relations: {
         category: true
@@ -39,6 +39,7 @@ export class ProductsService {
         id: 'DESC'
       },
       take,
+      skip
     }
 
     if (categoryId) {

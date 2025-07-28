@@ -16,10 +16,10 @@ export class ProductsController {
 //INICIO DE CORRECION DE CODIGO EN products.controllers.ts (category se cambio a categoryId)
   @Get()
 findAll(@Query() query: GetProductsQueryDTO) {
-
   const categoryId = query.category_id ? +query.category_id : undefined;
   const take = query.take ? query.take : 10
-  return this.productsService.findAll(categoryId, take);
+  const skip = query.skip ? query.skip : 0
+  return this.productsService.findAll(categoryId, take, skip);
 }
 //FIN DE CORRECION DE CODIGO EN products.controllers.ts (category se cambio a categoryId)
 
