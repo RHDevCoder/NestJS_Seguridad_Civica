@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -28,6 +28,9 @@ export class TransactionsService {
       console.log(product)
         if (!product) {
         throw new Error(`Producto con ID ${contents.productId} no encontrado`);
+        }
+        if(contents.quantity > product.inventory) {
+          throw new BadRequestException(`El articulo ${product.name} excede la cantidad disponible`)
         }
       product.inventory -= contents.quantity;
       // Guardar cambios de inventario
