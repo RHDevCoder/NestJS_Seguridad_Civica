@@ -16,47 +16,37 @@ export class TransactionsService {
 
 
   async create(createTransactionDto: CreateTransactionDto) {
+  await this.productRepository.manager.transaction(async (transactionEntityManager) => {
+    const transaction = new Transaction();
+    transaction.total = createTransactionDto.total;
 
-    const transaction = new Transaction()
-    transaction.total = createTransactionDto.total
-    await this.transactionRepository.save(transaction)
-
-//INICIO CORRECCION CODIGO PARA RESTAR PRODUCTOS
+    await transactionEntityManager.save(transaction);
 
     for (const contents of createTransactionDto.contents) {
-      const product = await this.productRepository.findOneBy({ id: contents.productId });
-      console.log(product)
-        if (!product) {
+      const product = await transactionEntityManager.findOneBy(Product, { id: contents.productId });
+      if (!product) {
         throw new Error(`Producto con ID ${contents.productId} no encontrado`);
-        }
-        if(contents.quantity > product.inventory) {
-          throw new BadRequestException(`El articulo ${product.name} excede la cantidad disponible`)
-        }
+      }
+      if (contents.quantity > product.inventory) {
+        throw new BadRequestException(`El artículo ${product.name} excede la cantidad disponible`);
+      }
+
       product.inventory -= contents.quantity;
-      // Guardar cambios de inventario
-      await this.productRepository.save(product);
-      // Guardar relación con solo el id del producto
-      await this.transactionContentsRepository.save({...contents, transaction, product: { id: contents.productId },
-      });
+      await transactionEntityManager.save(product);
+
+      const transactionContent = new TransactionContents();
+      transactionContent.price = contents.price;
+      transactionContent.quantity = contents.quantity;
+      transactionContent.transaction = transaction;
+      transactionContent.product = product;
+
+      await transactionEntityManager.save(transactionContent);
     }
+  });
 
-//FIN CORRECCION CODIGO PARA RESTAR PRODUCTOS
+  return "Venta almacenada correctamente";
+}
 
-/* //465 INICIO CODIGO ORIGINAL PARA RESTAR PRODUCTOS EN LA BASE DE DATOS
-    for(const contents of createTransactionDto.contents) {
-      const product = await this.productRepository.findOneBy({id: contents.productId})
-      product.inventory -= contents.quantity
-      console.log(product)
-//465 INICIO DE CORRECCION PRODUCTID NULL
-      await this.transactionContentsRepository.save({...contents, transaction, product: { id: contents.productId } // ← solo pasa el id
-});
-//465 FIN DE CORRECCION PRODUCTID NULL
-//      await this.transactionContentsRepository.save({...contents, transaction, product}) //CODIGO ORIGINAL PRESENTA FALLO EN BASE DE DATOS REGISTRA NULL
-    }
-*/ //465 FIN CODIGO ORIGINAL PARA RESTAR PRODUCTOS EN LA BASE DE DATOS
-
-    return "Venta almacenada correctamente"
-  }
 
   findAll() {
     return `This action returns all transactions`;
