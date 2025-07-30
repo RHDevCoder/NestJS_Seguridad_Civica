@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction, TransactionContents } from './entities/transaction.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
+import { isValid, parseISO } from 'date-fns';
 
 @Injectable()
 export class TransactionsService {
@@ -52,12 +53,20 @@ export class TransactionsService {
   return "Venta almacenada correctamente";
 }
 
-  findAll() {
+  findAll(transactionDate?: string) {
   const options: FindManyOptions<Transaction> = {
     relations: {
       contents: true
     }
-  };
+  }
+
+  if(transactionDate) {
+    const date = parseISO(transactionDate)
+    if(!isValid(date)) {
+      throw new BadRequestException('Fecha no valida')
+    }
+  }
+
 
   return this.transactionRepository.find(options);
 }
