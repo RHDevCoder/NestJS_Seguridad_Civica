@@ -18,7 +18,7 @@ export class TransactionsService {
   async create(createTransactionDto: CreateTransactionDto) {
   await this.productRepository.manager.transaction(async (transactionEntityManager) => {
     const transaction = new Transaction();
-    transaction.total = createTransactionDto.total;
+    transaction.total = createTransactionDto.contents.reduce((total, item) => total + (item.quantity * item.price), 0)
 
     await transactionEntityManager.save(transaction);
 
