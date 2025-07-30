@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, Options } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction, TransactionContents } from './entities/transaction.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
 
 @Injectable()
@@ -52,10 +52,15 @@ export class TransactionsService {
   return "Venta almacenada correctamente";
 }
 
-
   findAll() {
-    return `This action returns all transactions`;
-  }
+  const options: FindManyOptions<Transaction> = {
+    relations: {
+      contents: true
+    }
+  };
+
+  return this.transactionRepository.find(options);
+}
 
   findOne(id: number) {
     return `This action returns a #${id} transaction`;
