@@ -76,8 +76,21 @@ export class TransactionsService {
   return this.transactionRepository.find(options);
 }
 
-  findOne(id: number) {
-    return `This action returns a #${id} transaction`;
+  async findOne(id: number) {
+    const transaction = await this.transactionRepository.findOne({
+      where: {
+        id
+      },
+      relations: {
+        contents: true
+      }
+    })
+
+    if(!transaction) {
+      throw new NotFoundException('Transaccion no encontrada')
+    }
+    
+    return transaction
   }
 
   update(id: number, updateTransactionDto: UpdateTransactionDto) {
