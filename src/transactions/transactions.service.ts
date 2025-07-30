@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,25 +23,30 @@ export class TransactionsService {
     await transactionEntityManager.save(transaction);
 
     for (const contents of createTransactionDto.contents) {
-      const product = await transactionEntityManager.findOneBy(Product, { id: contents.productId });
-      if (!product) {
-        throw new Error(`Producto con ID ${contents.productId} no encontrado`);
-      }
-      if (contents.quantity > product.inventory) {
-        throw new BadRequestException(`El artículo ${product.name} excede la cantidad disponible`);
-      }
+  const product = await transactionEntityManager.findOneBy(Product, { id: contents.productId });
+  const errors: string[] = [];
 
-      product.inventory -= contents.quantity;
-      await transactionEntityManager.save(product);
+  if (!product) {
+    errors.push(`El producto con el ID: ${contents.productId} no existe`);
+    throw new NotFoundException(errors);
+  }
 
-      const transactionContent = new TransactionContents();
-      transactionContent.price = contents.price;
-      transactionContent.quantity = contents.quantity;
-      transactionContent.transaction = transaction;
-      transactionContent.product = product;
+  if (contents.quantity > product.inventory) {
+    errors.push(`El artículo ${product.name} excede la cantidad disponible`);
+    throw new BadRequestException(errors);
+  }
 
-      await transactionEntityManager.save(transactionContent);
-    }
+  product.inventory -= contents.quantity;
+  await transactionEntityManager.save(product);
+
+  const transactionContent = new TransactionContents();
+  transactionContent.price = contents.price;
+  transactionContent.quantity = contents.quantity;
+  transactionContent.transaction = transaction;
+  transactionContent.product = product;
+
+  await transactionEntityManager.save(transactionContent);
+}
   });
 
   return "Venta almacenada correctamente";
