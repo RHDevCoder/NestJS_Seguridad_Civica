@@ -98,20 +98,23 @@ export class TransactionsService {
   // }
 
   async remove(id: number) {
-    const transaction = await this.findOne(id);
+  const transaction = await this.findOne(id);
 
-    if (!transaction) {
-      throw new NotFoundException(`Transacción con id ${id} no encontrada`);
-    }
-
-    // Elimina primero los contents
-    for (const content of transaction.contents) {
-      await this.transactionContentsRepository.remove(content);
-    }
-
-    // Luego elimina la transacción
-    await this.transactionRepository.remove(transaction);
-
-    return {message: 'Venta eliminada'}
+  if (!transaction) {
+    throw new NotFoundException(`Transacción con id ${id} no encontrada`);
   }
+
+  for (const content of transaction.contents) {
+    const product = await this.productRepository.findOneBy({ id: content.product.id });
+    if (product) {
+      product.inventory += content.quantity;
+      await this.productRepository.save(product);
+    }
+    await this.transactionContentsRepository.remove(content);
+  }
+
+  await this.transactionRepository.remove(transaction);
+
+  return { message: 'Venta eliminada' };
+}
 }
