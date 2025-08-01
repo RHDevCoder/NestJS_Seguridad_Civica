@@ -26,7 +26,11 @@ export class TransactionsService {
 
       if(createTransactionDto.coupon) {
         const coupon = await this.couponService.applyCoupon(createTransactionDto.coupon)
-        console.log(coupon)
+        
+        const discount = (coupon.percentage / 100) * total
+        transaction.discount = discount
+        transaction.coupon = coupon.name
+        transaction.total -= discount        
       }
 
       await transactionEntityManager.save(transaction);
