@@ -1,6 +1,17 @@
+import { CategoriesRespondeSchema } from "@/src/schemas";
 import Logo from "./Logo";
 
+async function getCategories() {
+    const url = `${process.env.API_URL}/categories`
+    const req = await fetch(url)
+    const json =await req.json()
+    const categories = CategoriesRespondeSchema.parse(json)
+    return categories
+}
+
 export default async function MainNav() {
+    const categories = await getCategories()
+
     return (
         <header className="px-10 py-5 bg-gray-700 flex flex-col md:flex-row justify-between ">
             <div className="flex justify-center">
