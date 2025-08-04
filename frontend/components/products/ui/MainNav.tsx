@@ -1,5 +1,6 @@
 import { CategoriesRespondeSchema } from "@/src/schemas";
 import Logo from "./Logo";
+import Link from "next/link";
 
 async function getCategories() {
     const url = `${process.env.API_URL}/categories`
@@ -19,6 +20,13 @@ export default async function MainNav() {
             </div>
 
             <nav className="flex flex-col md:flex-row gap-2 items-center mt-5 md:mt-0">
+                {categories.map(category => (
+                    <Link
+                        key={category.id}
+                        href={`/${category.id}`}
+                        className="text-white hover:text-green-400 font-bold p-2"
+                    >{category.name}</Link>
+                ))}
 
             </nav>
         </header>
