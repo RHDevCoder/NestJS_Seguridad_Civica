@@ -9,6 +9,7 @@ interface Store {
     updateQuantity: (id: Product['id'], quantity: number) => void
     removeFromCart: (id: Product['id']) => void
     calculateTotal: () => void
+    applyCoupon: (couponName: string) => Promise<void>
 }
 
 export const useStore = create<Store>()(devtools((set, get) => ({
@@ -18,16 +19,12 @@ export const useStore = create<Store>()(devtools((set, get) => ({
         const { id: productId, categoryId, ...data } = product
         let contents : ShoppingCart = []
         const duplicated = get().contents.findIndex(item => item.productId === productId)
-
         if(duplicated >= 0) {
-
             if(get().contents[duplicated].quantity >= get().contents[duplicated].inventory ) return
-
             contents = get().contents.map(item => item.productId === productId ? {
                 ...item,
                 quantity: item.quantity + 1
             } : item )
-
         } else {
             contents = [...get().contents, {
                 ...data,
@@ -58,5 +55,8 @@ export const useStore = create<Store>()(devtools((set, get) => ({
         set(() => ({
             total
         }))
+    },
+    applyCoupon: async (couponName) => {
+        console.log(couponName)
     }
 })))
