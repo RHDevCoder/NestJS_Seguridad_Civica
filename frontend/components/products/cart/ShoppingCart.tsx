@@ -22,7 +22,7 @@ export default function ShoppingCart() {
                     </ul>
                 </>
             ) : (
-                <p className="text-xl text-center text-gray-900">El carrito esta vacio</p>
+                <p className="text-2xl font-bold text-center text-gray-900">El carrito esta vacio</p>
             )}
         </>
     )
