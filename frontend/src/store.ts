@@ -7,7 +7,7 @@ interface Store {
     contents: ShoppingCart
     addToCart: (product: Product) => void
     updateQuantity: (id: Product['id'], quantity: number) => void
-
+    removeFromCart: (id: Product['id']) => void
 }
 
 export const useStore = create<Store>()(devtools((set, get) => ({
@@ -42,6 +42,11 @@ export const useStore = create<Store>()(devtools((set, get) => ({
     updateQuantity: (id, quantity) => {
         set((state) => ({
             contents : state.contents.map(item => item.productId === id ? {...item, quantity} : item )
+        }))
+    },
+    removeFromCart: (id) => {
+        set((state) => ({
+            contents: state.contents.filter(item => item.productId !== id)
         }))
     }
 })))
