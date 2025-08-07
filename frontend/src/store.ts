@@ -45,11 +45,13 @@ export const useStore = create<Store>()(devtools((set, get) => ({
         set((state) => ({
             contents : state.contents.map(item => item.productId === id ? {...item, quantity} : item )
         }))
+        get().calculateTotal()
     },
     removeFromCart: (id) => {
         set((state) => ({
             contents: state.contents.filter(item => item.productId !== id)
         }))
+        get().calculateTotal()
     },
     calculateTotal: () => {
         const total = get().contents.reduce((total, item) => total + (item.quantity * item.price), 0 )
