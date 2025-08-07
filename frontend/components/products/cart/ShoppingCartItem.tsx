@@ -21,6 +21,9 @@ export default function ShoppingCartItem({item}: {item: CartItem} ) {
                     value={item.quantity}
                     onChange={() => {}}
                 >
+                    {Array.from({length: item.inventory}, (_, index) => index + 1 ).map(num => (
+                        <option key={num} value={num}>{num}</option>
+                    ))}
                 </select>
             </div>
             <div className='absolute top-10 -right-0'>
