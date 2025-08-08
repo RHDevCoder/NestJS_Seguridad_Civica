@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { devtools } from 'zustand/middleware'
-import { Product, ShoppingCart } from "./schemas";
+import { CouponResponseSchema, Product, ShoppingCart } from "./schemas";
 
 interface Store {
     total : number
@@ -64,6 +64,7 @@ export const useStore = create<Store>()(devtools((set, get) => ({
             })
         })
         const json = await req.json()
-        console.log(json)
+        const coupon = CouponResponseSchema.parse(json)
+        console.log(coupon)
     }
 })))

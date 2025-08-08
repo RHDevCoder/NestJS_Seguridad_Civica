@@ -26,6 +26,11 @@ const ShoppingCartContentsSchema = ProductSchema.pick({
 })
 export const ShoppingCartSchema = z.array(ShoppingCartContentsSchema)
 
+export const CouponResponseSchema = z.object({
+    name: z.string().default(''),
+    message: z.string(),
+    percentage: z.coerce.number().min(0).max(100).default(0)
+})
 
 export const CategoriesRespondeSchema = z.array(CategorySchema)
 export const CategoryWithProductsResponseSchema = CategorySchema.extend({
