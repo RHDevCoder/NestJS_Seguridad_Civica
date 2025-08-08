@@ -15,11 +15,12 @@ export default function SubmitOrderForm() {
     }
 
     const submitOrderWithData = submitOrder.bind(null, order)
-
     const [state, dispatch] = useActionState(submitOrderWithData, {
         errors: [],
         success: ''
     })
+
+    console.log(state)
 
     return (
         <form

@@ -43,6 +43,16 @@ export const OrderSchema = z.object({
     contents: z.array(OrderContentSchema).min(1, {message: 'El carrito no puede ir vacio'})
 })
 
+/** Success / Error Response */
+export const SuccessResponseSchema = z.object({
+    message: z.string()
+})
+export const ErrorResponseSchema = z.object({
+    message: z.array(z.string()),
+    error: z.string(),
+    statusCode: z.number()
+})
+
 export const CategoriesRespondeSchema = z.array(CategorySchema)
 export const CategoryWithProductsResponseSchema = CategorySchema.extend({
     products: z.array(ProductSchema)
