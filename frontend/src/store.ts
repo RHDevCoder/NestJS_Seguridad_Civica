@@ -4,6 +4,7 @@ import { Coupon, CouponResponseSchema, Product, ShoppingCart } from "./schemas";
 
 interface Store {
     total : number
+    discount: number
     contents: ShoppingCart
     coupon: Coupon
     addToCart: (product: Product) => void
@@ -11,10 +12,12 @@ interface Store {
     removeFromCart: (id: Product['id']) => void
     calculateTotal: () => void
     applyCoupon: (couponName: string) => Promise<void>
+    applyDiscount: () => void
 }
 
 export const useStore = create<Store>()(devtools((set, get) => ({
     total: 0,
+    discount: 0,
     contents: [],
     coupon: {
         percentage: 0,
@@ -61,6 +64,10 @@ export const useStore = create<Store>()(devtools((set, get) => ({
         set(() => ({
             total
         }))
+
+        if(get().coupon.percentage) {
+            get().applyDiscount()
+        }
     },
     applyCoupon: async (couponName) => {
         const req = await fetch('/coupons/api', {
@@ -74,5 +81,20 @@ export const useStore = create<Store>()(devtools((set, get) => ({
         set(() => ({
             coupon
         }))
+
+        if(coupon.percentage) {
+            get().applyDiscount()
+        }
+    },
+    applyDiscount: () => {
+        const subtotalAmount = get().contents.reduce((total, item) => total + (item.quantity * item.price), 0 )
+        const discount = (get().coupon.percentage / 100) * subtotalAmount
+        const total = subtotalAmount - discount
+
+        set(() => ({
+            discount,
+            total
+        }))
+
     }
 })))
