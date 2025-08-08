@@ -1,8 +1,30 @@
+import { submitOrder } from "@/actions/submit-order-action"
+import { useActionState } from "react"
+import { useStore } from "@/src/store"
 
 
 export default function SubmitOrderForm() {
+
+    const total = useStore(state => state.total)
+    const coupon = useStore(state => state.coupon)
+    const contents = useStore(state => state.contents)
+    const order = {
+        total,
+        coupon,
+        contents
+    }
+
+    console.log(order)
+
+    const [state, dispatch] = useActionState(submitOrder, {
+        errors: [],
+        success: ''
+    })
+
     return (
-        <form>
+        <form
+            action={dispatch}
+        >
 
             <input 
                 type="submit"
