@@ -8,7 +8,7 @@ export async function submitOrder(data: unknown) {
     const req = await fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'aplication/json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({...order})
     })
