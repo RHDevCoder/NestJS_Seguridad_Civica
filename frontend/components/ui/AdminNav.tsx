@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Logo from '@/components/products/ui/Logo'
+import Logo from '@/components/ui/Logo'
 
 export default function AdminNav() {
     return (
