@@ -5,5 +5,5 @@ export async function getSalesByDate(date: string) {
     const req = await fetch(url)
     const json = await req.json()
     const transactions = TransactionsResponseSchema.parse(json)
-    return json
+    return transactions
 }
