@@ -42,6 +42,7 @@ export default async function ProductsPage({searchParams} : {searchParams: Searc
             <Pagination
                 page={+page}
                 totalPages={totalPages}
+                baseUrl="/admin/products"
             />            
         </>
     )
