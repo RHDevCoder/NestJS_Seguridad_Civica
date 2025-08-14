@@ -23,8 +23,6 @@ export default async function EditProductPage({params} : {params : Params}) {
         const {id} = await params
         const product = await getProduct(id)
 
-        console.log(product)
-
     return (
         <>
             <Link
@@ -32,10 +30,12 @@ export default async function EditProductPage({params} : {params : Params}) {
                 className="rounded bg-green-400 font-bold py-2 px-10"
             >Volver</Link>
 
-            <Heading>Editar Producto: {}</Heading>
+            <Heading>Editar Producto: { product.name }</Heading>
 
             <EditProductForm>
-                <ProductForm />
+                <ProductForm
+                    product={product}
+                />
             </EditProductForm>
 
         </>
