@@ -1,6 +1,7 @@
 "use server"
 
-import { ProductFormSchema } from "@/src/schemas"
+import { ErrorResponseSchema, ProductFormSchema } from "@/src/schemas"
+import { success } from "zod"
 
 type ActionStateType = {
     errors: string[]
@@ -23,11 +24,27 @@ export async function addProduct(prevState: ActionStateType, formData: FormData)
         }
     }
 
-// Comunicar con la API
+    const url = `${process.env.API_URL}/products`
+    const req = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(product.data)
+    })
+    const json = await req.json()
+
+    if(!req.ok) {
+        const errors = ErrorResponseSchema.parse(json)
+        return {
+            errors: errors.message.map(issue => issue),
+            success: ''
+        }
+    }
 
 
     return {
         errors: [],
-        success: ''
+        success: 'Producto Agregado Correctamente'
     }
 }
