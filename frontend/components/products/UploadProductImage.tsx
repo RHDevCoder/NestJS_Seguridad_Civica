@@ -1,10 +1,13 @@
 "use client"
 
 import { uploadImage } from "@/actions/upload-image-action"
-import { useCallback } from "react"
+import Image from "next/image"
+import { useCallback, useState } from "react"
 import { useDropzone } from "react-dropzone"
 
 export default function UploadProductImage() {
+
+    const [image, setImage] = useState('')
 
     const onDrop = useCallback(async(files : File[]) => {
         const formData = new FormData()
@@ -12,7 +15,7 @@ export default function UploadProductImage() {
             formData.append('file', file)
         })
         const image = await uploadImage(formData)
-        console.log(image)
+        setImage(image)
         
     }, [])
 
@@ -44,6 +47,26 @@ export default function UploadProductImage() {
                     {!isDragActive && (<p>Arrastra y suelta una imagen aquí</p>)}
                 </div>
             </div>
+
+            {image && (
+                <div className="py-5 space-y-3">
+                    <p className="font-bold">Imagen Producto</p>
+                    <div className="w-[300px] h-[420px] relative">
+                        <Image
+                            src={image}
+                            alt='Imagen Publicada'
+                            className='object-cover'
+                            fill
+                        />
+                    </div>
+                </div>
+            )}
+
+            <input
+                type='hidden'
+                name='image'
+                defaultValue={image}
+            />
         
         </>
     )
